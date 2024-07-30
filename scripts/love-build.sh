@@ -4,8 +4,8 @@
 
 GAMEDATA="game.dat"
 
-gamename=""
-version=""
+gamename="build"
+version="1.0"
 vInName=false
 
 usage() {
@@ -22,20 +22,22 @@ while [[ "$#" -gt 0 ]]; do
         ;;
         -v|--version)
             version=$2
+            shift
         ;;
         -vInName)
             vInName=true
         ;;
         *)
             usage
+            return
         ;;
     esac
     shift
 done
 
 destBuild="$(pwd)/$gamename"
-if [ $vInName ]; then
-    destBuild+=$version
+if [ $vInName = true ]; then
+    destBuild+="_$version"
 fi
 destBuild+=".love"
 
@@ -46,6 +48,6 @@ fi
 echo "$gamename\n$version\n$(love --version)" > $GAMEDATA
 
 # zip files
-{ git ls-files; echo $GAMEDATA } | zip $destBuild -@
+{ git ls-files; echo $GAMEDATA; } | zip $destBuild -@ > /dev/null
 
 rm $GAMEDATA
