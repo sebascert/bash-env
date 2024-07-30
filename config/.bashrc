@@ -104,18 +104,6 @@ if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
-# Load user functions
-usr_funcs="$HOME/functions"
-if [ ! -d "$usr_funcs" ]; then
-    mkdir $usr_funcs
-fi
-
-for func in "$usr_funcs"/*; do
-    if [ -f "$func" ]; then
-        . $func
-    fi
-done
-
 # Start ssh client if not running
 if [ -z "$SSH_AGENT_PID" ]; then
     eval "$(ssh-agent -s)" > /dev/null
@@ -134,11 +122,26 @@ for key in "$SSH_KEYS"/*; do
     fi
 done
 
-# Alacritty
-. "$HOME/.cargo/env"
-source ~/.bash_completion/alacritty
+# Load user functions
+usr_funcs="$HOME/functions"
+if [ ! -d "$usr_funcs" ]; then
+    mkdir $usr_funcs
+fi
 
-# NVM
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+for func in "$usr_funcs"/*; do
+    if [ -f $func ]; then
+        . $func
+    fi
+done
+
+# Load user functions
+usr_app_setup="$HOME/app-setup"
+if [ ! -d $usr_app_setup ]; then
+    mkdir $usr_app_setup
+fi
+
+for setup in $usr_app_setup/*; do
+    if [ -f $setup ]; then
+        . $setup
+    fi
+done
