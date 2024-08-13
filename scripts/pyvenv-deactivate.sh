@@ -2,15 +2,14 @@
 
 # Dependencies: python3, virtualenv
 
-venv="pyvenv"
-requirements="requirements.txt"
+# requirements="requirements.txt"
 
-if [ ! -d $venv ]; then
-    echo "no virtual enviroment"
-    exit 1
+deactivate 2> /dev/null
+if [ $? -ne 0 ]; then
+    echo "no python virtual enviroment"
+    return
 fi
 
-pip freeze > $requirements
-deactivate
+# pip freeze > $requirements
 
 echo "virtual enviroment deactivated"
