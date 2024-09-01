@@ -99,6 +99,9 @@ if ! shopt -oq posix; then
     fi
 fi
 
+# Enable core dump
+ulimit -c unlimited
+
 # Alias definitions.
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
