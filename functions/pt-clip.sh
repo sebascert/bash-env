@@ -1,4 +1,4 @@
-pt_clip(){
+pt-clip(){
 	echo $(xclip -o -selection clipboard)
 }
 

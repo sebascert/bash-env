@@ -1,3 +1,3 @@
-cp_clip() {
+cp-clip() {
     printf "%s" "$*" | xclip -selection clipboard
 }
