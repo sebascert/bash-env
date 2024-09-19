@@ -1,0 +1,58 @@
+# Alacritty Configuration
+
+import = [
+"~/.config/alacritty/theme.toml",
+]
+
+shell = "/bin/bash"
+
+# WINDOW
+
+[window]
+decorations = "None"
+opacity = 0.9
+blur = true
+
+[window.dimensions]
+columns = 100
+lines = 30
+
+[window.padding]
+x = 5
+y = 5
+
+# SCROLLING
+
+[scrolling]
+history = 4000
+multiplier = 5
+
+# FONT
+
+[font]
+size = 13
+
+# SELECTION
+
+[selection]
+save_to_clipboard = true
+
+# CURSOR
+
+[cursor]
+thickness = 0.2
+
+[cursor.style]
+#shape = "Beam"
+blinking = "On"
+
+# MOUSE
+
+[mouse]
+hide_when_typing = true
+
+# KEYBOARD
+
+[keyboard]
+bindings = [{key="CapsLock", mode="Vi", action="ToggleNormalSelection" }]
+

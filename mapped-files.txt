@@ -1,0 +1,3 @@
+alacritty/alacritty.toml=~/.config/alacritty/alacritty.toml
+alacritty/theme.toml=~/.config/alacritty/theme.toml
+
