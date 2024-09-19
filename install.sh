@@ -4,7 +4,7 @@
 
 function homeInstall() {
     rsync -avh -r --no-perms home/ ~
-    source ~/.bashrc
+    source $HOME/bashrc
 }
 
 function binInstall() {
@@ -41,7 +41,7 @@ function mappedInstall() {
     fi
 
     find "$map_dir" -type f | while read -r file; do
-        file=${file#$map_dir/}
+        file="${file#"$map_dir/"}"
         if [ -z ${mapped_files["$file"]} ]; then
             echo "unmapped $file"
         fi
@@ -59,7 +59,7 @@ mapped=false
 force=false
 check_unmapped=true
 
-# Parse command-line options
+# parse command-line options
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -h|--home)
@@ -95,7 +95,9 @@ if [[ $home = false && $bin = false && $mapped = false ]]; then
 fi
 
 if [ $force = false ]; then
-    read -p "This may overwrite existing files in your system. Are you sure? (y/n) " -n 1
+    echo "This may overwrite existing files in your system"
+    echo "For viewing which files will be overriden use diff-env"
+    read -p "Are you sure? (y/n) " -n 1
     echo ""
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
         exit 1
@@ -118,4 +120,3 @@ if [ $mapped = true ]; then
     mappedInstall
     echo "Installed mapped env"
 fi
-
