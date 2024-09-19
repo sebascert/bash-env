@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# Dependencies: godot
+
+usage() {
+    echo "Usage: $0 [godot-version]"
+}
+
+if [ "$#" -gt 1 ]; then
+    usage
+    exit 1
+fi
+
+godotVersion="4.3"
+
+if [ "$#" -eq 1 ]; then
+    godotVersion=$1
+fi
+
+eval "godot$godotVersion --version > /dev/null 2>&1"
+
+if [ "$?" -ne 0 ]; then
+    echo "godot$godotVersion binary not found"
+else
+    eval "godot$godotVersion --editor > /dev/null 2>&1 & disown"
+    echo "Started godot as separate process"
+fi

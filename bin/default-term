@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Gets the default terminal emulator name
+
+# Dependencies: x-terminal-emulator
+
+echo "$(readlink -f /usr/bin/x-terminal-emulator | xargs basename)"
