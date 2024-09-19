@@ -1,0 +1,26 @@
+[user]
+	name = YoAquinjs
+	email = sebascertuche@gmail.com
+
+[alias]
+    co = checkout
+    br = branch
+    ci = commit
+    st = status
+    last = log -1 HEAD
+    lg = log --graph --oneline --all --decorate
+    amend = commit --amend --no-edit
+    pom = push origin main
+    pf = push --force
+    save = "!git add -A && git commit -m 'Savepoint'"
+    conf = config --global
+    aliases = config --get-regexp alias
+
+[core]
+	editor = vim
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
