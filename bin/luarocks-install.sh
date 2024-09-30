@@ -2,6 +2,10 @@
 
 # Dependencies: curl, tar, make
 
+set -e
+
+trap 'echo "Failed on: $BASH_COMMAND"; exit $?' ERR
+
 usage() {
     echo "Usage: $0 [luarocks-version]"
 }
