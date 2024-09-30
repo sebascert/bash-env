@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Dependencies: open-xdg, mmdc
+
+diagram="$1"
+diagramName="${diagram%.*}"
+diagramDir=$(dirname "$diagram")
+
+cd "$diagramDir"
+
+config="puppeteer-config.json" 
+confifContent='{ "args": ["--no-sandbox"] }'
+
+if [ ! -f "$config" ]; then
+	echo "$confifContent" > "$config" 
+fi
+	
+mmdc -i "$diagram" -o "$diagramName".png -p "$config"  -t dark -b black
+
+if [ $? -ne 0 ]; then
+	echo "failed mmdc compilation" 2>&1
+	exit $?
+fi
+
+mv "$diagramName"-1.png "$diagramName".png -f
+
+open "$diagramName".png
+
