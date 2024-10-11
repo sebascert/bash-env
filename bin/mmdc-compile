@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Dependencies: open-xdg, mmdc
-
 diagram="$1"
 diagramName="${diagram%.*}"
 diagramDir=$(dirname "$diagram")

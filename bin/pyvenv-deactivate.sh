@@ -4,8 +4,8 @@
 
 deactivate 2> /dev/null
 if [ $? -ne 0 ]; then
-    echo "no python virtual enviroment"
+    echo "no python virtual environment"
     return
 fi
 
-echo "virtual enviroment deactivated"
+echo "virtual environment deactivated"

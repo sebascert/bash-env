@@ -1,16 +1,17 @@
 #!/bin/bash
 
 # Focus the window by the name provided
-# Dependencies: default-term, wmctrl
+# Dependencies: wmctrl
 
-# wmctrl may not found the window if it's name and class
-# differ from the name provided
+# wmctrl may not found the window if it's
+# name and class name differ from the name provided
 
-wmctrl -a "$1"
+# first try by class
+wmctrl -xa "$1"
 
-# if not found try by class name
+# if not found try by name
 if [ $? -eq 1 ]; then
-    wmctrl -xa "$1"
+    wmctrl -a "$1"
 fi
 
 # window not found

@@ -1,3 +1,5 @@
+# remap
+
 alias cls='clear'
 alias gerp='grep'
 
@@ -6,24 +8,47 @@ alias la='ls -A'
 alias l='ls -CF'
 alias mv='mv -i'
 
-alias apt-update='sudo apt update && sudo apt upgrade'
+alias vim='nvim'
 
-# alias dotfiles='la | grep -E "^\." | column'
+alias py='python3'
+
+alias cprofile='py -m cProfile'
+alias line_profiler='py -m line_profiler'
+alias memory_profiler='py -m memory_profiler'
+
+alias blender-disown='blender & disown'
+
+# utilities
+
+alias apt-update='sudo apt update && sudo apt upgrade -y'
+
 alias dotfiles='ls -d .??*'
+# alias dotfiles='la | grep -E "^\." | column'
+
+alias gh-ssh='gh repo view --json sshUrl -q .sshUrl'
 
 alias rm-cores='rm core.* vgcore.*'
 
 alias http-server='python3 -m http.server -b 127.0.0.1'
 
-alias py='python3'
+alias tree-igit="tree -a -I '.git'"
 
 alias cp-clip='xclip -selection clipboard'
 alias pt-clip='xclip -selection clipboard -o'
 
-alias vim-bashrc='vim $(locate .bashrc | head -n1)'
-alias vim-alias='vim $(locate .bash_aliases | head -n1)'
+alias vol-get='amixer get Master | tail -n2'
+alias vol-set='amixer set Master'
 
-# source scripts
+alias music-st='spotifycli --status'
+alias music-pl='spotifycli --play'
+alias music-ps='spotifycli --pause'
+alias music-nx='spotifycli --next'
+alias music-pr='spotifycli --prev'
+
+# my utilities
+
 alias pyvenv-activate='source pyvenv-activate.sh'
 alias pyvenv-deactivate='source pyvenv-deactivate.sh'
+
+alias ow='open-window'
 

@@ -1,4 +1,4 @@
-# ENVIROMENT
+# ENVIRONMENT
 
 # enable bash completion in interactive shells
 if ! shopt -oq posix; then
@@ -8,6 +8,9 @@ if ! shopt -oq posix; then
         . /etc/bash_completion
     fi
 fi
+
+# add snap to path
+export PATH=$PATH:/snap/bin
 
 # Start ssh client if not running
 if [ -z "$SSH_AGENT_PID" ]; then
@@ -24,7 +27,7 @@ SSH_KEYS="$HOME/.ssh/keys"
 mkdir -p "$SSH_KEYS"
 
 for key in "$SSH_KEYS"/*; do
-    ssh_add_stderr=$(ssh-add "$key" 2>&1 > /dev/null)
+    ssh_add_stderr=$(ssh-add "$key" 2>&1)
     if [ $? -ne 0 ]; then
         echo "$ssh_add_stderr"
     fi
@@ -40,13 +43,13 @@ for func in "$user_funcs_dir"/*; do
     fi
 done
 
-# load app setups
-usr_app_setup="$HOME/app-setup"
-mkdir -p "$usr_app_setup"
+# load source on start
+source_on_start="$HOME/source-on-start"
+mkdir -p "$source_on_start"
 
-for setup in "$usr_app_setup"/*; do
-    if [ -f "$setup" ]; then
-        . "$setup"
+for sfile in "$source_on_start"/*; do
+    if [ -f "$sfile" ]; then
+        . "$sfile"
     fi
 done
 
@@ -90,4 +93,8 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 
 # Enable core dump
 ulimit -c unlimited
+
+# EXPORTS
+
+export EDITOR=nvim
 
