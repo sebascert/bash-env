@@ -29,14 +29,14 @@ installEnv() {
 }
 
 usage() {
-    echo "Usage: $0 [--all ^env1 ^env2|env1 env2 ...] [OPTIONS]..."
+    echo "Usage: $0 [--all ^env1 ^env2 ...|env1 env2 ...] [OPTIONS]..."
     echo
     echo "when the --all flag is provided, envs passed are ignored"
     echo "the copy option will copy the files from the installed env to the repo env"
     echo "deleting env files which are not installed"
     echo -e "\nOptions:\n"
     echo -e "-h, --help \t display usage and exit"
-    echo -e "-a,--all \t install all environments"
+    echo -e "-a, --all \t install all environments"
     echo -e "-cp, --copy \t copies the installed env to the repo env"
     echo -e "-so, --source \t sources your .bashrc after install"
     echo -e "-f, --force \t skips y/n prompt"

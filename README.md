@@ -1,47 +1,62 @@
-# Bash Enviroment
+# Bash Environment
 
-Dotfiles, configuration and utilities for my command-line enviroment
+Dotfiles, configuration and utilities for my command-line environment
 
 ## Features
 
-- Different config scopes:
+- Customizable config environments:
   `home` configs, installed in the user home dir.
   `bin` configs, installed in /usr/local/bin.
-  `mapped` configs, install each file in it's corresponding mapped path.
-- Mapped configs: Map files under `./mapped` in the `mapped-files.txt`.
-  Use the format `/path/in/mapped=path/in/system`.
-  Warns the user when unmapped files are left in an `./install.sh`
-- Diff-env utility: Outputs which files in the enviroment differ from the config files.
-  
+  Add your own environments
+- Mapped environments: map each environment to it's destination on your system
+  Use the format `/path/in/repo=path/in/system`.
+- Install utility: Installs environments with various options
+- Copy utility: Copies the common files from your installed envs to the repo envs
+- Diff-env utility: Outputs differences between installed envs and repo envs
+
 
 ## Installation
 
 Clone the repository:
-   ```bash
-   git clone https://github.com/YoAquinJs/bash-env
-   cd bash-enn
-   # for inmediate install
-   ./install --home --bin --mapped
-   ```
+```bash
+git clone https://github.com/YoAquinJs/bash-env
+cd bash-env
+# for immediate install
+./install --all --source
+```
 
 ## Usage
 
 ### Install tool
 
 ```bash
-# add the -f or --force flag for skiping the confirmation
-# use any combination of home bin or mapped
-./install.sh --home --bin --mapped
+# help option
+source install.sh --help
+
+# use --all or -a to install all environments
+source install.sh --all
+
+# use --force or -f to avoid the initial prompt
+source install.sh -all --force
+
+# use --source or -so to source your $HOME/.bashrc
+source install.sh --all --source
+
+# use --copy or -cp to copy your env to the repo env
+source install.sh --all --copy
 ```
 
 ### Diff tool
 
 ```bash
-# use only one of home, bin or mapped
-./diff-env.sh --home
-./diff-env.sh --bin
-./diff-env.sh --mapped
+# help option
+./diff-env.sh --help
+
+# use --all or -a to diff all environments
+./diff-env.sh --all
 ```
+
 ## License
 
-This project is licensed under the MIT License, see the [license](LICENSE-MIT.txt) file for details.
+This project is licensed under the MIT License,
+see the [license](LICENSE-MIT.txt) file for details.

@@ -23,12 +23,12 @@ function diffEnv() {
 }
 
 usage() {
-    echo "Usage: $0 [--all|env1 env2 ...]"
+    echo "Usage: $0 [--all ^env1 ^env2 ...|env1 env2 ...]"
     echo
     echo "when the --all flag is provided, envs passed are ignored"
     echo -e "\nOptions:\n"
     echo -e "-h, --help \t display usage and exit"
-    echo -e "-a,--all \t install all environments"
+    echo -e "-a, --all \t install all environments"
 }
 
 all=false
