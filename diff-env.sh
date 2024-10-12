@@ -1,102 +1,92 @@
 #!/bin/bash
 
-# dependencies: diff
+# dependencies: rsync
 
-function evalDiffEcode() {
-    case $? in
-        1)
-            echo "differ: $file"
-        ;;
-        2)
-            echo "missing: $file"
-        ;;
-        *) ;;
-    esac
+function evalDiffExitCode() {
+    if [ "$1" -eq 1 ]; then
+        echo "differ: $file"
+    elif [ $1 -eq 2 ]; then
+        echo "missing: $file"
+    fi
 }
 
-function unmappedDiff() {
-    origin=$1
-    dest=$2
-    find "$origin" -type f | while read -r file; do
+function diffEnv() {
+    origin=$(eval "echo $1")
+    dest=$(eval "echo ${environments["$1"]}")
+
+    find "$origin"/ -type f | while read -r file; do
         file="${file#"$origin/"}"
         diff "$origin/$file" "$dest/$file" > /dev/null 2>&1
-        evalDiffEcode
+
+        evalDiffExitCode $? | xargs -I {} echo "ENV '$origin' {}"
     done
 }
 
-function mappedDiff() {
-    mappings="mapped-files.txt"
-    map_dir="mapped"
-    separator='='
-
-    while IFS="" read -r line || [ -n "$line" ]; do
-        if [ -z "$line" ]; then
-            continue
-        fi
-
-        file="${line%%$separator*}"
-        eval dest="${line#*$separator}"
-
-        if [ ! -f "$map_dir/$file" ]; then
-            echo "attempting to map unexistant file: $file" >&2
-            return 1
-        fi
-
-        diff "$map_dir/$file" "$dest" > /dev/null 2>&1
-        evalDiffEcode
-    done < "$mappings"
+usage() {
+    echo "Usage: $0 [--all|env1 env2 ...]"
+    echo
+    echo "no action will be taken if any env is provided with the --all flag"
+    echo -e "\nOptions:\n"
+    echo -e "-h, --help \t display usage and exit"
+    echo -e "-a,--all \t install all environments"
 }
 
-function usage() {
-    echo "Usage: $0 [-h|--home] [-b|--bin] [-m|--mapped]"
-    echo "--home, --bin and --mapped are exclusive"
-}
+all=false
 
-home=0
-bin=0
-mapped=0
+unset selected_envs
+declare -A selected_envs
 
 # parse command-line options
 while [[ "$#" -gt 0 ]]; do
     case $1 in
-        -h|--home)
-            home=1
-        ;;
-        -b|--bin)
-            bin=1
-        ;;
-        -m|--mapped)
-            mapped=1
-        ;;
-        --help)
+        -a|--all)
+            all=true
+            ;;
+        -h|--help)
             usage
             exit 0
-        ;;
+            ;;
         *)
-            usage
-            exit 1
-        ;;
+            if [ $all = true ]; then
+                usage
+                echo "already selected all environments"
+                return 1
+            fi
+            if [[ -v selected_envs["$1"] ]]; then
+                usage
+                echo "repeated environments"
+                return 1
+            fi
+
+            # ensure all paths don't have / for rsync to work
+            env="${1%/}"
+
+            selected_envs["$env"]=1
+            ;;
     esac
     shift
 done
 
-# check if none or more than one where selected
-count=$((home + bin + mapped))
-if [ $count -ne 1 ]; then
-    echo "nothing to do"
-    exit 0
+cd "$(dirname "${BASH_SOURCE[0]}")" || exit 1
+
+declare -A environments
+source "./get-environments.sh"
+
+if [ $? -eq 1 ]; then
+    return 1
 fi
 
-cd $(dirname ${BASH_SOURCE})
-
-if [ $home -eq 1 ]; then
-    unmappedDiff home $HOME
+if [ $all = true ]; then
+    for env in "${!environments[@]}"; do
+        selected_envs["$env"]=1
+    done
 fi
 
-if [ $bin -eq 1 ]; then
-    unmappedDiff bin /usr/local/bin
-fi
+for env in "${!selected_envs[@]}"; do
+    diffEnv "$env"
+    if [ $? -eq 1 ]; then
+        return 1
+    fi
+done
 
-if [ $mapped -eq 1 ]; then
-    mappedDiff
-fi
+exit 0

@@ -1,30 +1,6 @@
-# Dependencies: rsync, find
+# Dependencies: rsync, find, get-environments.sh
 
-unset environments
-declare -A environments
-
-getEnvs(){
-    while IFS=":" read -r env_dir dest_dir; do
-        if [[ -v environments["$env_dir"] ]]; then
-            echo "The config directory '$env_dir' is repeated"
-            return 1
-        fi
-
-        # ensure all paths have / for rsync to work
-
-        if [[ ! "$env_dir" =~ /$ ]]; then
-            env_dir="$env_dir/"
-        fi
-
-        if [[ ! "$dest_dir" =~ /$ ]]; then
-            dest_dir="$dest_dir/"
-        fi
-
-        environments["$env_dir"]="$dest_dir"
-    done < "$1"
-}
-
-installEnv(){
+installEnv() {
     if [[ ! -v environments["$1"] ]]; then
         echo "environment '$1' not mapped"
         return 1
@@ -35,18 +11,18 @@ installEnv(){
     if [ $copy = false ]; then
         rsync -avh --no-perms "$origin" "$dest"
     else
-        rsync -avh --no-perms --existing "$dest" "$origin"
+        rsync -avh --no-perms --existing "$dest"/ "$origin"/
 
         # remove all files that have been removed on dest
-        find "$origin" -type f | while read -r file; do
-            file="${file#"$origin"}"
-            diff "${origin}$file" "${dest}$file" &> /dev/null
+        find "$origin"/ -type f | while read -r file; do
+            file="${file#"$origin/"}"
+            diff "$origin/$file" "$dest/$file" &> /dev/null
 
-            if [[ $? -ne 2 || -f "${dest}$file" ]]; then
+            if [[ $? -ne 2 || -f "$dest/$file" ]]; then
                 continue
             fi
 
-            rm "${origin}$file"
+            rm "$origin/$file"
         done
     fi
 }
@@ -55,6 +31,8 @@ usage() {
     echo "Usage: $0 [--all|env1 env2 ...] [OPTIONS]..."
     echo
     echo "no action will be taken if any env is provided with the --all flag"
+    echo "the copy option will copy the files from the installed env to the repo env"
+    echo "deleting env files which are not installed"
     echo -e "\nOptions:\n"
     echo -e "-h, --help \t display usage and exit"
     echo -e "-a,--all \t install all environments"
@@ -102,12 +80,9 @@ while [[ "$#" -gt 0 ]]; do
                 return 1
             fi
 
-            # ensure all paths have / for rsync to work
+            # ensure all paths don't have / for rsync to work
+            env="${1%/}"
 
-            env="$1"
-            if [[ ! "$1" =~ /$ ]]; then
-                env="$env/"
-            fi
             selected_envs["$env"]=1
             ;;
     esac
@@ -131,8 +106,8 @@ fi
 
 cd "$(dirname "${BASH_SOURCE[0]}")" || return 1
 
-env_map="env-map.txt"
-getEnvs $env_map
+source "./get-environments.sh"
+
 if [ $? -eq 1 ]; then
     return 1
 fi
