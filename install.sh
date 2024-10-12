@@ -23,14 +23,15 @@ installEnv() {
             fi
 
             rm "$origin/$file"
+            echo "removed '$origin/$file'"
         done
     fi
 }
 
 usage() {
-    echo "Usage: $0 [--all|env1 env2 ...] [OPTIONS]..."
+    echo "Usage: $0 [--all ^env1 ^env2|env1 env2 ...] [OPTIONS]..."
     echo
-    echo "no action will be taken if any env is provided with the --all flag"
+    echo "when the --all flag is provided, envs passed are ignored"
     echo "the copy option will copy the files from the installed env to the repo env"
     echo "deleting env files which are not installed"
     echo -e "\nOptions:\n"
@@ -69,11 +70,6 @@ while [[ "$#" -gt 0 ]]; do
             return 0
             ;;
         *)
-            if [ $all = true ]; then
-                usage
-                echo "already selected all environments"
-                return 1
-            fi
             if [[ -v selected_envs["$1"] ]]; then
                 usage
                 echo "repeated environments"
@@ -114,7 +110,11 @@ fi
 
 if [ $all = true ]; then
     for env in "${!environments[@]}"; do
-        selected_envs["$env"]=1
+        if [[ -v selected_envs["$env"] ]]; then
+            unset 'selected_envs["$env"]'
+        else
+            selected_envs["$env"]=1
+        fi
     done
 fi
 

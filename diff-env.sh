@@ -5,7 +5,7 @@
 function evalDiffExitCode() {
     if [ "$1" -eq 1 ]; then
         echo "differ: $file"
-    elif [ $1 -eq 2 ]; then
+    elif [ "$1" -eq 2 ]; then
         echo "missing: $file"
     fi
 }
@@ -25,7 +25,7 @@ function diffEnv() {
 usage() {
     echo "Usage: $0 [--all|env1 env2 ...]"
     echo
-    echo "no action will be taken if any env is provided with the --all flag"
+    echo "when the --all flag is provided, envs passed are ignored"
     echo -e "\nOptions:\n"
     echo -e "-h, --help \t display usage and exit"
     echo -e "-a,--all \t install all environments"
@@ -47,11 +47,6 @@ while [[ "$#" -gt 0 ]]; do
             exit 0
             ;;
         *)
-            if [ $all = true ]; then
-                usage
-                echo "already selected all environments"
-                return 1
-            fi
             if [[ -v selected_envs["$1"] ]]; then
                 usage
                 echo "repeated environments"
@@ -78,7 +73,11 @@ fi
 
 if [ $all = true ]; then
     for env in "${!environments[@]}"; do
-        selected_envs["$env"]=1
+        if [[ -v selected_envs["$env"] ]]; then
+            unset 'selected_envs["$env"]'
+        else
+            selected_envs["$env"]=1
+        fi
     done
 fi
 
