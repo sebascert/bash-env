@@ -1,122 +1,158 @@
-#!/bin/bash
+# Dependencies: rsync, find
 
-# Dependencies: rsync
+unset environments
+declare -A environments
 
-function homeInstall() {
-    rsync -avh -r --no-perms home/ ~
-    source $HOME/bashrc
-}
-
-function binInstall() {
-    sudo rsync -avh -r --no-perms bin/ /usr/local/bin
-}
-
-function mappedInstall() {
-    mappings="mapped-files.txt"
-    map_dir="mapped"
-    separator='='
-
-    declare -A mapped_files
-
-    while IFS="" read -r line || [ -n "$line" ]; do
-        if [ -z "$line" ]; then
-            continue
-        fi
-
-        file="${line%%$separator*}"
-        eval dest="${line#*$separator}"
-
-        if [ ! -f "$map_dir/$file" ]; then
-            echo "attempting to map unexistant file: $file" >&2
+getEnvs(){
+    while IFS=":" read -r env_dir dest_dir; do
+        if [[ -v environments["$env_dir"] ]]; then
+            echo "The config directory '$env_dir' is repeated"
             return 1
         fi
 
-        mkdir -p "$(dirname "$dest")"
-        cp "$map_dir/$file" "$dest"
-        mapped_files["$file"]=1
-    done < "$mappings"
+        # ensure all paths have / for rsync to work
 
-    if [ check_unmapped = false ]; then
-        return 0
+        if [[ ! "$env_dir" =~ /$ ]]; then
+            env_dir="$env_dir/"
+        fi
+
+        if [[ ! "$dest_dir" =~ /$ ]]; then
+            dest_dir="$dest_dir/"
+        fi
+
+        environments["$env_dir"]="$dest_dir"
+    done < "$1"
+}
+
+installEnv(){
+    if [[ ! -v environments["$1"] ]]; then
+        echo "environment '$1' not mapped"
+        return 1
     fi
 
-    find "$map_dir" -type f | while read -r file; do
-        file="${file#"$map_dir/"}"
-        if [ -z ${mapped_files["$file"]} ]; then
-            echo "unmapped $file"
-        fi
-    done
+    origin=$(eval "echo $1")
+    dest=$(eval "echo ${environments["$1"]}")
+    if [ $copy = false ]; then
+        rsync -avh --no-perms "$origin" "$dest"
+    else
+        rsync -avh --no-perms --existing "$dest" "$origin"
+
+        # remove all files that have been removed on dest
+        find "$origin" -type f | while read -r file; do
+            file="${file#"$origin"}"
+            diff "${origin}$file" "${dest}$file" &> /dev/null
+
+            if [[ $? -ne 2 || -f "${dest}$file" ]]; then
+                continue
+            fi
+
+            rm "${origin}$file"
+        done
+    fi
 }
 
 usage() {
-    echo "Usage: $0 [-h|--home] [-b|--bin] [-m|--mapped] [-f|--force] [--ignore-unmapped]"
+    echo "Usage: $0 [--all|env1 env2 ...] [OPTIONS]..."
+    echo
+    echo "no action will be taken if any env is provided with the --all flag"
+    echo -e "\nOptions:\n"
+    echo -e "-h, --help \t display usage and exit"
+    echo -e "-a,--all \t install all environments"
+    echo -e "-cp, --copy \t copies the installed env to the repo env"
+    echo -e "-so, --source \t sources your .bashrc after install"
+    echo -e "-f, --force \t skips y/n prompt"
 }
 
-home=false
-bin=false
-mapped=false
-
+all=false
+source=false
+copy=false
 force=false
-check_unmapped=true
+
+unset selected_envs
+declare -A selected_envs
 
 # parse command-line options
 while [[ "$#" -gt 0 ]]; do
-    case $1 in
-        -h|--home)
-            home=true
-        ;;
-        -b|--bin)
-            bin=true
-        ;;
-        -m|--mapped)
-            mapped=true
-        ;;
+    case "$1" in
+        -a|--all)
+            all=true
+            ;;
+        -cp|--copy)
+            copy=true
+            ;;
+        -so|--source)
+            source=true
+            ;;
         -f|--force)
             force=true
-        ;;
-        --ignore-unmapped)
-            check_unmapped=false
-        ;;
-        --help)
+            ;;
+        -h|--help)
             usage
-            exit 0
-        ;;
+            return 0
+            ;;
         *)
-            usage
-            exit 1
-        ;;
+            if [ $all = true ]; then
+                usage
+                echo "already selected all environments"
+                return 1
+            fi
+            if [[ -v selected_envs["$1"] ]]; then
+                usage
+                echo "repeated environments"
+                return 1
+            fi
+
+            # ensure all paths have / for rsync to work
+
+            env="$1"
+            if [[ ! "$1" =~ /$ ]]; then
+                env="$env/"
+            fi
+            selected_envs["$env"]=1
+            ;;
     esac
     shift
 done
 
-if [[ $home = false && $bin = false && $mapped = false ]]; then
+if [[ $all = false && ${#selected_envs[@]} -eq 0 ]]; then
     echo "nothing to do"
-    exit 0
+    return 0
 fi
 
 if [ $force = false ]; then
     echo "This may overwrite existing files in your system"
-    echo "For viewing which files will be overriden use diff-env"
+    echo "For viewing which files will be overridden use diff-env"
     read -p "Are you sure? (y/n) " -n 1
     echo ""
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        exit 1
+        return 1
     fi
 fi
 
-cd "$(dirname "${BASH_SOURCE}")"
+cd "$(dirname "${BASH_SOURCE[0]}")" || return 1
 
-if [ $home = true ]; then
-    homeInstall
-    echo "Installed home env"
+env_map="env-map.txt"
+getEnvs $env_map
+if [ $? -eq 1 ]; then
+    return 1
 fi
 
-if [ $bin = true ]; then
-    binInstall
-    echo "Installed binaries"
+if [ $all = true ]; then
+    for env in "${!environments[@]}"; do
+        selected_envs["$env"]=1
+    done
 fi
 
-if [ $mapped = true ]; then
-    mappedInstall
-    echo "Installed mapped env"
+for env in "${!selected_envs[@]}"; do
+    installEnv "$env"
+    if [ $? -eq 1 ]; then
+        return 1
+    fi
+done
+
+if [ $source = true ]; then
+    source "$HOME/.bashrc"
 fi
+
+cd - > /dev/null|| return 1
+return 0
