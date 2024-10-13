@@ -51,4 +51,3 @@ alias pyvenv-activate='source pyvenv-activate.sh'
 alias pyvenv-deactivate='source pyvenv-deactivate.sh'
 
 alias ow='open-window'
-

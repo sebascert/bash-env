@@ -4,4 +4,4 @@
 
 # Dependencies: x-terminal-emulator
 
-echo "$(readlink -f /usr/bin/x-terminal-emulator | xargs basename)"
+readlink -f /usr/bin/x-terminal-emulator | xargs basename

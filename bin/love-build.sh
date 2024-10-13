@@ -13,7 +13,7 @@ LOVE_VERSION=$(love --version | sed 's/[^0-9.]//g')
 
 gamename="build"
 version="1.0"
-vInName=false
+version_in_name=false
 
 usage() {
     echo "Usage: $0 [-gamename value] [-v | --version value] [-vInName]"
@@ -25,35 +25,35 @@ while [[ "$#" -gt 0 ]]; do
         -gamename)
             gamename=$2
             shift
-        ;;
+            ;;
         -v|--version)
             version=$2
             shift
-        ;;
+            ;;
         -vInName)
-            vInName=true
-        ;;
+            version_in_name=true
+            ;;
         *)
             usage
             exit 1
-        ;;
+            ;;
     esac
     shift
 done
 
-destBuild="$(pwd)/$gamename"
-if [ $vInName = true ]; then
-    destBuild+="_${version}_love_$LOVE_VERSION"
+dest_build="$(pwd)/$gamename"
+if [ $version_in_name = true ]; then
+    dest_build+="_${version}_love_$LOVE_VERSION"
 fi
-destBuild+=".love"
+dest_build+=".love"
 
-if [ -f "$destBuild" ]; then
-    rm "$destBuild"
+if [ -f "$dest_build" ]; then
+    rm "$dest_build"
 fi
 
-echo "$gamename \n version: $version \n Love version: $LOVE_VERSION" > $GAMEDATA
+echo -e "$gamename \n version: $version \n Love version: $LOVE_VERSION" > $GAMEDATA
 
 # zip files
-{ git ls-files; echo $GAMEDATA; } | zip $destBuild -@ > /dev/null
+{ git ls-files; echo $GAMEDATA; } | zip  "$dest_build" -@ > /dev/null
 
 rm $GAMEDATA

@@ -11,17 +11,16 @@ if [ "$#" -gt 1 ]; then
     exit 1
 fi
 
-godotVersion="4.3"
+godot_version="4.3"
 
 if [ "$#" -eq 1 ]; then
-    godotVersion=$1
+    godot_version=$1
 fi
 
-eval "godot$godotVersion --version > /dev/null 2>&1"
 
-if [ "$?" -ne 0 ]; then
-    echo "godot$godotVersion binary not found"
+if eval "godot$godot_version --version > /dev/null 2>&1"; then
+    echo "godot$godot_version binary not found"
 else
-    eval "godot$godotVersion --editor > /dev/null 2>&1 & disown"
+    eval "godot$godot_version --editor > /dev/null 2>&1 & disown"
     echo "Started godot as separate process"
 fi

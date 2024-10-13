@@ -9,7 +9,7 @@ installEnv() {
     origin=$(eval "echo $1")
     dest=$(eval "echo ${environments["$1"]}")
     if [ $copy = false ]; then
-        rsync -avh --no-perms "$origin" "$dest"
+        rsync -avh --no-perms "$origin"/ "$dest"/
     else
         rsync -avh --no-perms --existing "$dest"/ "$origin"/
 

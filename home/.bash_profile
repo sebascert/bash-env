@@ -3,14 +3,11 @@
 # enable bash completion in interactive shells
 if ! shopt -oq posix; then
     if [ -f /usr/share/bash-completion/bash_completion ]; then
-        . /usr/share/bash-completion/bash_completion
+        source /usr/share/bash-completion/bash_completion
     elif [ -f /etc/bash_completion ]; then
-        . /etc/bash_completion
+        source /etc/bash_completion
     fi
 fi
-
-# add snap to path
-export PATH=$PATH:/snap/bin
 
 # Start ssh client if not running
 if [ -z "$SSH_AGENT_PID" ]; then
@@ -18,8 +15,12 @@ if [ -z "$SSH_AGENT_PID" ]; then
 fi
 
 # Alias definitions.
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
+if [ -f "$HOME/.bash_aliases" ]; then
+    source "$HOME/.bash_aliases"
+fi
+
+if [ -f "$HOME/.bash_exports" ]; then
+    source "$HOME/.bash_exports"
 fi
 
 # Load ssh keys
@@ -39,7 +40,7 @@ mkdir -p "$user_funcs_dir"
 
 for func in "$user_funcs_dir"/*; do
     if [ -f "$func" ]; then
-        . "$func"
+        source "$func"
     fi
 done
 
@@ -49,7 +50,7 @@ mkdir -p "$source_on_start"
 
 for sfile in "$source_on_start"/*; do
     if [ -f "$sfile" ]; then
-        . "$sfile"
+        source "$sfile"
     fi
 done
 
@@ -93,8 +94,4 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 
 # Enable core dump
 ulimit -c unlimited
-
-# EXPORTS
-
-export EDITOR=nvim
 

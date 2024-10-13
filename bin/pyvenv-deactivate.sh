@@ -2,8 +2,7 @@
 
 # Dependencies: python3, virtualenv
 
-deactivate 2> /dev/null
-if [ $? -ne 0 ]; then
+if ! activate 2> /dev/null; then
     echo "no python virtual environment"
     return
 fi

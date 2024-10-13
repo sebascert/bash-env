@@ -4,7 +4,6 @@
 
 status=""
 venv="pyvenv"
-requirements="requirements.txt"
 
 current_dir="$(pwd)"
 
@@ -20,10 +19,10 @@ else
     status="$venv created"
 fi
 
-. "$current_dir/$venv/bin/activate"
+source "$current_dir/$venv/bin/activate"
 
 # py_version=$("$venv/bin/python" --version | sed -n -E 's/.* ([0-9]+\.[0-9]+).*/\1/p')
 # PYTHON_VENV_PATH="$current_dir/$venv/lib/python$py_version/site-packages"
 # export PYTHONPATH="$PYTHON_VENV_PATH"
 
-echo $status
+echo "$status"

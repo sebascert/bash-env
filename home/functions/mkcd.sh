@@ -1,3 +1,3 @@
 mkcd(){
-	mkdir -p $* && cd $*
+    mkdir -p "$*" && cd "$*" || return 1
 }

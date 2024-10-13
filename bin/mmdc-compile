@@ -1,26 +1,26 @@
 #!/bin/bash
 
 diagram="$1"
-diagramName="${diagram%.*}"
-diagramDir=$(dirname "$diagram")
+diagram_name="${diagram%.*}"
+diagram_dir=$(dirname "$diagram")
 
-cd "$diagramDir"
+cd "$diagram_dir" || exit 1
 
-config="puppeteer-config.json" 
-confifContent='{ "args": ["--no-sandbox"] }'
+config="puppeteer-config.json"
+confif_content='{ "args": ["--no-sandbox"] }'
 
 if [ ! -f "$config" ]; then
-	echo "$confifContent" > "$config" 
-fi
-	
-mmdc -i "$diagram" -o "$diagramName".png -p "$config"  -t dark -b black
-
-if [ $? -ne 0 ]; then
-	echo "failed mmdc compilation" 2>&1
-	exit $?
+    echo "$confif_content" > "$config"
 fi
 
-mv "$diagramName"-1.png "$diagramName".png -f
+mmdc -i "$diagram" -o "$diagram_name".png -p "$config" -t dark -b black
+mmdc_exit="$?"
 
-open "$diagramName".png
+if [ $mmdc_exit -ne 0 ]; then
+    echo "failed mmdc compilation" 2>&1
+    exit $mmdc_exit
+fi
 
+mv "$diagram_name"-1.png "$diagram_name".png -f
+
+open "$diagram_name".png
