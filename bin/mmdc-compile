@@ -13,7 +13,7 @@ if [ ! -f "$config" ]; then
     echo "$confif_content" > "$config"
 fi
 
-mmdc -i "$diagram" -o "$diagram_name".png -p "$config" -t dark -b black
+mmdc -i "$diagram" -o "$diagram_name".png -p "$config"
 mmdc_exit="$?"
 
 if [ $mmdc_exit -ne 0 ]; then
