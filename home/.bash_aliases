@@ -20,6 +20,8 @@ alias blender-disown='blender & disown'
 
 # utilities
 
+alias source-bash='source ~/.bashrc'
+
 alias apt-update='sudo apt update && sudo apt upgrade -y'
 
 alias dotfiles='ls -d .??*'
