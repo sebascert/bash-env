@@ -1,8 +1,6 @@
 # Alacritty Configuration
 
-import = [
-"~/.config/alacritty/theme.toml",
-]
+import = ["~/.config/alacritty/themes/themes/gruvbox_dark.toml"]
 
 shell = "/bin/bash"
 
@@ -33,16 +31,16 @@ multiplier = 5
 size = 12
 
 [font.normal]
-family="JetBrains Mono Nerd Font"
-style="Regular"
+family = "JetBrains Mono Nerd Font"
+style = "Regular"
 
 [font.bold]
-family="JetBrains Mono Nerd Font"
-style="Bold"
+family = "JetBrains Mono Nerd Font"
+style = "Bold"
 
 [font.italic]
-family="JetBrains Mono Nerd Font"
-style="Italic"
+family = "JetBrains Mono Nerd Font"
+style = "Italic"
 
 # SELECTION
 
@@ -66,5 +64,4 @@ hide_when_typing = true
 # KEYBOARD
 
 [keyboard]
-bindings = [{key="CapsLock", mode="Vi", action="ToggleNormalSelection" }]
-
+bindings = [{ key = "CapsLock", mode = "Vi", action = "ToggleNormalSelection" }]
