@@ -94,4 +94,5 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 
 # Enable core dump
 ulimit -c unlimited
+echo "./core.%e.%p" | sudo tee /proc/sys/kernel/core_pattern > /dev/null
 
