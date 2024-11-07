@@ -33,7 +33,8 @@ alias rm-cores='rm core.* vgcore.*'
 
 alias http-server='python3 -m http.server -b 127.0.0.1'
 
-alias tree-ignore="tree -a -I '.git|pyvenv|node_modules|__pycache__'"
+alias tree-gitignore="tree -a -I '.git' --gitignore --dirsfirst"
+alias tree-ignore="tree -a -I '.git|pyvenv|node_modules|__pycache__' --dirsfirst"
 
 alias cp-clip='xclip -selection clipboard'
 alias pt-clip='xclip -selection clipboard -o'
