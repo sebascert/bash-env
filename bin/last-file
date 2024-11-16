@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# n is expected to be zero-indexed
+n=${1:-0}
+
+files=()
+while IFS= read -r file; do
+    if [ ! -f "$file" ]; then
+        echo "Invalid file provided  '$file'" >&2
+    else
+        files+=("$file")
+    fi
+done
+
+if [[ ${#files[@]} -eq 0 ]]; then
+    echo "No files provided."
+    exit 1
+fi
+
+mapfile -t sorted_files < <(ls -1t "${files[@]}" 2>/dev/null)
+
+# Check if n is valid
+if (( n < 0 || n >= ${#sorted_files[@]} )); then
+    echo "Invalid n: $n. Provide a value between 0 and ${#sorted_files[@]-1}"
+    exit 1
+fi
+
+echo "${sorted_files[n]}"
+
