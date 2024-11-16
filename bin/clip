@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Copies cmd stdout to clipboardo
+
+# Dependencies: xclip
+
+# source profile as it shell was interactive
+# but not loading as interactive as it prints
+# to buffer extra special characters
+source ~/.bash_profile
+"$@" | tr -d '\n' | xclip -selection clipboard
