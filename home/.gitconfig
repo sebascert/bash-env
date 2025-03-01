@@ -1,12 +1,13 @@
 [user]
-	name = YoAquinjs
-	email = sebascertuche@gmail.com
+    name = YoAquinjs
+    email = sebascertuche@gmail.com
 
 [alias]
     co = checkout
     br = branch
     ci = commit
     st = status
+    ft = fetch --prune
     last = log -1 HEAD
     lg = log --graph --oneline --all --decorate
     amend = commit --amend --no-edit
@@ -15,14 +16,15 @@
     save = "!git add -A && git commit -m 'Savepoint'"
     conf = config --global
     aliases = config --get-regexp alias
+    remote-url = remote get-url origin
 
 [core]
-	editor = vim
+    editor = nvim -c 'colorscheme tokyonight-night'
 [credential "https://github.com"]
-	helper = 
-	helper = !/usr/bin/gh auth git-credential
+    helper =
+    helper = !/usr/bin/gh auth git-credential
 [credential "https://gist.github.com"]
-	helper = 
-	helper = !/usr/bin/gh auth git-credential
+    helper =
+    helper = !/usr/bin/gh auth git-credential
 [init]
-	defaultBranch = main
+    defaultBranch = main

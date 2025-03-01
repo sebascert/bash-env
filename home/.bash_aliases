@@ -10,6 +10,8 @@ alias mv='mv -i'
 
 alias vim='nvim'
 
+alias bt='bluetoothctl'
+
 alias py='python3'
 
 alias cprofile='py -m cProfile'
