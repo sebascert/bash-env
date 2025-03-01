@@ -8,4 +8,4 @@
 # but not loading as interactive as it prints
 # to buffer extra special characters
 source ~/.bash_profile
-"$@" | tr -d '\n' | xclip -selection clipboard
+printf "%s" "$("$@")" | xclip -selection clipboard
