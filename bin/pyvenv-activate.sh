@@ -4,7 +4,7 @@
 
 status=""
 # if no venv is found then default to first one
-venv_dir=("pyvenv" ".venv" "venv")
+venv_dir=(".pyvenv" ".venv" "venv")
 
 current_dir="$(pwd)"
 venv_path=""

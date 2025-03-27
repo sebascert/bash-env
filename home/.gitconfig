@@ -8,13 +8,14 @@
     ci = commit
     st = status
     ft = fetch --prune
-    last = log -1 HEAD
-    lg = log --graph --oneline --all --decorate
-    amend = commit --amend --no-edit
-    pom = push origin main
     pf = push --force
-    save = "!git add -A && git commit -m 'Savepoint'"
     conf = config --global
+    lg = log --graph --oneline
+    lgg = log --graph --oneline --all
+
+    last = log -1 HEAD
+    amend = commit --amend --no-edit
+    save = "!git add -A && git commit -m 'Savepoint'"
     aliases = config --get-regexp alias
     remote-url = remote get-url origin
 
