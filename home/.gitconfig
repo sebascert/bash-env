@@ -7,6 +7,7 @@
     br = branch
     ci = commit
     st = status
+    s = status -s
     ft = fetch --prune
     pf = push --force
     conf = config --global
