@@ -6,6 +6,9 @@ alias gerp='grep'
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+
+alias lz='eza'
+
 alias mv='mv -i'
 
 alias vim='nvim'
@@ -35,8 +38,7 @@ alias rm-cores='rm core.* vgcore.*'
 
 alias http-server='python3 -m http.server -b 127.0.0.1'
 
-alias tree-gitignore="tree -a -I '.git' --gitignore --dirsfirst"
-alias tree-ignore="tree -a -I '.git|pyvenv|node_modules|__pycache__' --dirsfirst"
+alias tree='eza -T --git-ignore --group-directories-first'
 
 alias cp-clip='xclip -selection clipboard'
 alias pt-clip='xclip -selection clipboard -o'
