@@ -1,0 +1,52 @@
+#! /bin/bash
+
+usage() {
+    echo
+    echo "Usage: $(basename "$0") <github-url>"
+    echo
+    echo "Download the raw content from a GitHub URL."
+    echo
+    echo "Examples:"
+    echo "  $(basename "$0") https://github.com/user/repo"
+    echo "      Downloads README.md from the default branch of the repo."
+    echo
+    echo "  $(basename "$0") https://github.com/user/repo/blob/main/path/to/file.txt"
+    echo "      Downloads the raw file at the specified path."
+    echo
+} >&2
+
+if [ $# -ne 1 ]; then
+    usage
+    exit 1
+fi
+
+case $1 in
+    -h|--help)
+        usage
+        exit 0
+        ;;
+esac
+
+url="$1"
+
+# remove trailing slash if present
+url="${url%/}"
+
+if [[ "$url" =~ ^https://github.com/([^/]+)/([^/]+)$ ]]; then
+    # Repo root -> download README.md
+    user="${BASH_REMATCH[1]}"
+    repo="${BASH_REMATCH[2]}"
+    raw_url="https://raw.githubusercontent.com/$user/$repo/HEAD/README.md"
+    curl -O "$raw_url"
+elif [[ "$url" =~ ^https://github.com/([^/]+)/([^/]+)/blob/([^/]+)/(.*)$ ]]; then
+    # File URL
+    user="${BASH_REMATCH[1]}"
+    repo="${BASH_REMATCH[2]}"
+    branch="${BASH_REMATCH[3]}"
+    path="${BASH_REMATCH[4]}"
+    raw_url="https://raw.githubusercontent.com/$user/$repo/$branch/$path"
+    curl -L "$raw_url"
+else
+    echo "Unrecognized GitHub URL: $url" >&2
+    exit 1
+fi
