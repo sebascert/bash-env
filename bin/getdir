@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# resolves given file directory following symlinks
+# non posix, requires GNU readlink
+
+readlink -f "$0" | xargs dirname | cat
