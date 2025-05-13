@@ -38,7 +38,7 @@ alias rm-cores='rm core.* vgcore.*'
 
 alias http-server='python3 -m http.server -b 127.0.0.1'
 
-alias tree='eza -T --git-ignore --group-directories-first'
+alias tree='eza -T --git-ignore --group-directories-first --all'
 
 alias cp-clip='xclip -selection clipboard'
 alias pt-clip='xclip -selection clipboard -o'

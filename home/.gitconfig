@@ -1,5 +1,5 @@
 [user]
-    name = YoAquinjs
+    name = Sebastian Certuche
     email = sebascertuche@gmail.com
 
 [alias]
@@ -8,6 +8,7 @@
     ci = commit
     st = status
     s = status -s
+    df = diff --name-only
     ft = fetch --prune
     pf = push --force
     conf = config --global
