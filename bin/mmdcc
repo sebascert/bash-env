@@ -1,0 +1,51 @@
+#!/bin/bash
+
+usage() {
+    cat <<EOF
+Usage: $0 <source.md> [outfile] [mmdc-flags]
+
+Arguments:
+  source.md      Path to the Markdown diagram source file
+  outfile        Optional output file name (defaults to <source>.png)
+  mmdc-flags     Optional flags passed directly to Mermaid CLI (mmdc)
+
+Examples:
+  $0 diagram.md
+  $0 diagram.md output.png
+  $0 diagram.md --theme dark
+EOF
+}
+
+[ $# -ge 0 ] || {
+    echo 'missing source markdown file'
+    usage
+    exit 1
+}>&2
+
+source="$1"
+shift
+
+case "$1" in
+    -*)
+        ;;
+    *)
+        outformat="$1"
+        ;;
+esac
+mmdc_flags=("$@")
+
+cd "$(dirname "$source")" || exit 1
+
+diagram_file=$(basename "$source")
+
+[ -z "$outformat" ] && outformat="png"
+echo "$outformat"
+
+config="puppeteer-config.json"
+config_content='{ "args": ["--no-sandbox"] }'
+[ ! -f "$config" ] && echo "$config_content" > "$config"
+
+mmdc -i "$diagram_file" -e "$outformat" -p "$config" "${mmdc_flags[@]}" || {
+    echo "failed mmdc compilation"
+    exit 2
+} >&2
