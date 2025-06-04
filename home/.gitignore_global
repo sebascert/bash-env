@@ -1,1 +1,4 @@
 .rgignore
+
+/.idea/
+/.vscode/

@@ -12,7 +12,6 @@ prefer_editor_prompt: disabled
 pager:
 # Aliases allow you to create nicknames for gh commands
 aliases:
-    view: issue view
     co: pr checkout
     comment: issue comment
     review: pr review
@@ -21,8 +20,16 @@ aliases:
     url: browse -n
     diff: pr diff
     df: pr diff --name-only
+
     il: issue list
+    ie: issue edit
+    ic: issue create
+    iv: issue view
+
     pl: pr list
+    pe: pr edit
+    pc: pr create
+    pv: pr view
 # The path to a unix socket through which send HTTP connections. If blank, HTTP traffic will be handled by net/http.DefaultTransport.
 http_unix_socket:
 # What web browser gh should use when opening URLs. If blank, will refer to environment.
