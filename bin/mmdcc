@@ -2,21 +2,21 @@
 
 usage() {
     cat <<EOF
-Usage: $0 <source.md> [outfile] [mmdc-flags]
+Usage: $0 <source.md> [outfile-format] [mmdc-flags]
 
 Arguments:
-  source.md      Path to the Markdown diagram source file
-  outfile        Optional output file name (defaults to <source>.png)
-  mmdc-flags     Optional flags passed directly to Mermaid CLI (mmdc)
+  source.md         Path to the Markdown diagram source file
+  outfile-format    Optional output file name (defaults to png)
+  mmdc-flags        Optional flags passed directly to Mermaid CLI
 
 Examples:
   $0 diagram.md
-  $0 diagram.md output.png
+  $0 diagram.md svg
   $0 diagram.md --theme dark
 EOF
 }
 
-[ $# -ge 0 ] || {
+[ $# -gt 0 ] || {
     echo 'missing source markdown file'
     usage
     exit 1
