@@ -6,16 +6,13 @@ alias gerp='grep'
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
-
-alias lz='eza'
-
 alias mv='mv -i'
 
 alias vim='nvim'
-
 alias bt='bluetoothctl'
-
 alias py='python3'
+alias lz='eza'
+alias sc='mit-scheme --quiet'
 
 alias cprofile='py -m cProfile'
 alias line_profiler='py -m line_profiler'
