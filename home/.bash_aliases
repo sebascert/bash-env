@@ -13,6 +13,7 @@ alias bt='bluetoothctl'
 alias py='python3'
 alias lz='eza'
 alias sc='mit-scheme --quiet'
+alias scf='scheme-format -i'
 
 alias cprofile='py -m cProfile'
 alias line_profiler='py -m line_profiler'

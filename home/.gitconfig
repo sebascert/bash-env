@@ -12,10 +12,11 @@
     df = diff --name-only
     ft = fetch --prune
     pf = push --force
+    pd = push --delete
+    pu = git push --set-upstream origin $(git symbolic-ref --short HEAD)
     conf = config --global
     lg = log --graph --oneline
     lgg = log --graph --oneline --all
-
     last = log -1 HEAD
     amend = commit --amend --no-edit
     save = "!git add -A && git commit -m 'Savepoint'"
