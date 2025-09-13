@@ -39,7 +39,6 @@ cd "$(dirname "$source")" || exit 1
 diagram_file=$(basename "$source")
 
 [ -z "$outformat" ] && outformat="png"
-echo "$outformat"
 
 config="puppeteer-config.json"
 config_content='{ "args": ["--no-sandbox"] }'
