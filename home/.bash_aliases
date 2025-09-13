@@ -8,6 +8,8 @@ alias la='ls -A'
 alias l='ls -CF'
 alias mv='mv -i'
 
+alias op='open 2>/dev/null'
+
 alias vim='nvim'
 alias bt='bluetoothctl'
 alias py='python3'
