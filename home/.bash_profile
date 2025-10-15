@@ -73,12 +73,17 @@ fi
 SSH_KEYS="$HOME/.ssh/keys"
 mkdir -p "$SSH_KEYS"
 
-for key in "$SSH_KEYS"/*; do
-    ssh_add_stderr=$(ssh-add "$key" 2>&1)
-    if [ $? -ne 0 ]; then
-        echo "$ssh_add_stderr"
-    fi
-done
+# Check if directory contains any files before looping
+if [ -n "$(ls -A "$SSH_KEYS" 2>/dev/null)" ]; then
+    for key in "$SSH_KEYS"/*; do
+        if [ -f "$key" ]; then
+            ssh_add_stderr=$(ssh-add "$key" 2>&1)
+            if [ $? -ne 0 ]; then
+                echo "$ssh_add_stderr"
+            fi
+        fi
+    done
+fi
 
 # load user functions
 user_funcs_dir="$HOME/functions"
